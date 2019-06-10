@@ -1,16 +1,16 @@
 package com.excella.reactor.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Value;
-import lombok.experimental.NonFinal;
 import org.springframework.data.annotation.Id;
 
-@Value
+@Data
 @Builder
-public class Book {
-    @NonFinal
+public class Book implements DomainModel<Long> {
     @Id
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NonNull
