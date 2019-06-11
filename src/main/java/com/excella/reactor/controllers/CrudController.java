@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public abstract class CrudController<T extends DomainModel> {
     @GetMapping(value = "/", name = "Get all of resource", produces = "application/json")
-    Publisher<T> getAllBooks() {
+    Publisher<T> getAll() {
         return getService().all()
                 .doOnSubscribe(result -> log.info("Getting all"));
     }
@@ -44,7 +44,7 @@ public abstract class CrudController<T extends DomainModel> {
     }
 
     @DeleteMapping(value = "/{id}", name = "Delete resource by id", produces = "application/json")
-    Publisher<T> removeBookById(@PathVariable Long id) {
+    Publisher<T> removeById(@PathVariable Long id) {
         return getService().delete(id)
                 .doOnSubscribe(result -> log.info("Deleting id {}", id));
     }

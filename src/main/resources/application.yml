@@ -2,7 +2,8 @@ server.port: 8080
 management:
   endpoints:
     web.base-path: /
-    enabled-by-default: false
+    web.exposure.include: "*"
+    enabled-by-default: true
   endpoint:
     health.enabled: true
     health.show-details: always
