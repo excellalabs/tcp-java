@@ -39,7 +39,7 @@ dependencies {
 	implementation 'net.logstash.logback:logstash-logback-encoder:5.3'
 	implementation 'org.springframework.boot:spring-boot-configuration-processor'
 	implementation 'javax.persistence:javax.persistence-api:2.2'
-
+	implementation 'org.springframework.boot:spring-boot-devtools'
 
 
 	runtimeOnly 'org.postgresql:postgresql'

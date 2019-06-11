@@ -6,6 +6,8 @@ import com.excella.reactor.service.CrudService;
 import com.excella.reactor.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +19,7 @@ public class EmployeeController extends CrudController<Employee> {
   private EmployeeService service;
 
   @Autowired
-  public EmployeeController(EmployeeService service) {
+  public EmployeeController(@Qualifier("employeeService") EmployeeService service) {
     this.service = service;
   }
 
