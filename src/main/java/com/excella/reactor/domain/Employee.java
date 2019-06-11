@@ -1,6 +1,9 @@
 package com.excella.reactor.domain;
 
 import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 import org.springframework.data.annotation.Id;
@@ -9,15 +12,14 @@ import javax.validation.constraints.NotNull;
 
 @Value
 @Builder
-public class Employee {
+@Data
+public class Employee implements DomainModel {
   @NonFinal
   @Id
   private Long id;
 
-  @NotNull
-  private String firstName;
+  private Bio bio;
 
-  @NotNull
-  private String lastName;
+  private Contact contact;
 
 }
