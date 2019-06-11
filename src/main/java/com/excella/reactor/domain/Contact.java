@@ -1,9 +1,8 @@
 package com.excella.reactor.domain;
 
-import lombok.Data;
-
-import javax.persistence.Embeddable;
 import java.io.Serializable;
+import javax.persistence.Embeddable;
+import lombok.Data;
 
 @Data
 @Embeddable

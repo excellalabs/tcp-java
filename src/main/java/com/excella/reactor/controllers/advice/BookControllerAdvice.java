@@ -14,16 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 public class BookControllerAdvice {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    ResponseEntity<GenericError> handleBookNotFoundException(final ResourceNotFoundException e) {
-        log.warn(e.getMessage(), e.getCause());
-        return buildGenericErrorResponseEntity(
-                "Book not found",
-                HttpStatus.NOT_FOUND);
-    }
+  @ExceptionHandler(ResourceNotFoundException.class)
+  ResponseEntity<GenericError> handleBookNotFoundException(final ResourceNotFoundException e) {
+    log.warn(e.getMessage(), e.getCause());
+    return buildGenericErrorResponseEntity("Book not found", HttpStatus.NOT_FOUND);
+  }
 
-    private static ResponseEntity<GenericError> buildGenericErrorResponseEntity(
-            String message, HttpStatus httpStatus) {
-        return new ResponseEntity<GenericError>(GenericError.of(httpStatus.value(), message), httpStatus);
-    }
+  private static ResponseEntity<GenericError> buildGenericErrorResponseEntity(
+      String message, HttpStatus httpStatus) {
+    return new ResponseEntity<GenericError>(
+        GenericError.of(httpStatus.value(), message), httpStatus);
+  }
 }
