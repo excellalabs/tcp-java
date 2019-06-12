@@ -1,9 +1,10 @@
 package com.excella.reactor.domain;
 
+import lombok.Data;
+
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.Embeddable;
-import lombok.Data;
 
 @Data
 @Embeddable
