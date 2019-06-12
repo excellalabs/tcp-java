@@ -1,0 +1,8 @@
+<suite name="unit">
+    <test name="unit suite">
+        <classes>
+            <class name="com.excella.reactor.ReactorApplicationTests" />
+            <class name="com.excella.reactor.controllers.EmployeeControllerTests"/>
+        </classes>
+    </test>
+</suite>

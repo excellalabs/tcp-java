@@ -1,15 +1,17 @@
 package com.excella.reactor;
 
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.testng.annotations.Test;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+import static org.testng.Assert.assertTrue;
+
+@Test
 public class ReactorApplicationTests {
 
   @Test
   public void contextLoads() {}
 
+  @Test
+  public void pleasefail(){
+    assertTrue(false);
+  }
 }

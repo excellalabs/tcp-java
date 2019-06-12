@@ -1,5 +1,15 @@
 package com.excella.reactor.controllers;
 
-public class EmployeeControllerTests {
+import org.testng.annotations.Test;
 
+import static org.testng.Assert.*;
+
+public class EmployeeControllerTests {
+    @Test
+    public void contextLoads() {}
+
+    @Test
+    public void failplease(){
+        fail();
+    }
 }
