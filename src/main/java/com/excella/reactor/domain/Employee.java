@@ -1,20 +1,17 @@
 package com.excella.reactor.domain;
 
-import java.io.Serializable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Value;
-import lombok.experimental.NonFinal;
-import org.springframework.data.annotation.Id;
 
-@Value
-@Builder
 @Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @Entity
-public class Employee implements DomainModel, Serializable {
-  @NonFinal @Id private Long id;
+public class Employee extends DomainModel {
 
   @Embedded private Bio bio;
 
