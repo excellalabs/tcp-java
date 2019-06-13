@@ -2,7 +2,7 @@
     <test name="unit suite">
         <classes>
             <class name="com.excella.reactor.ReactorApplicationTests" />
-            <class name="com.excella.reactor.controllers.EmployeeControllerTests"/>
+            <class name="com.excella.reactor.controllers.EmployeeControllerUnitTests"/>
         </classes>
     </test>
 </suite>
