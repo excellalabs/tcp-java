@@ -1,12 +1,13 @@
 package com.excella.reactor.domain;
 
-import java.io.Serializable;
-import javax.persistence.Embeddable;
 import lombok.Data;
+
+import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Data
 @Embeddable
-class Contact implements Serializable {
+public class Contact implements Serializable {
   private String email;
   private String phoneNumber;
 }
