@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Embeddable
-class Contact implements Serializable {
+public class Contact implements Serializable {
   private String email;
   private String phoneNumber;
   @Embedded

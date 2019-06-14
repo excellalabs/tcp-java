@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @Embeddable
-class Bio implements Serializable {
+public class Bio implements Serializable {
   private String firstName;
   private String middleName;
   private String lastName;
