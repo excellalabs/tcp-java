@@ -6,15 +6,17 @@ import org.testng.annotations.Test;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.util.Arrays;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class EmployeeControllerUnitTests {
 
     EmployeeService mockService = mock(EmployeeService.class);
-    Employee mockEmployee1 = mock(Employee.class);
-    Employee mockEmployee2 = mock(Employee.class);
-    Employee mockEmployee3 = mock(Employee.class);
+    Employee mockEmployee1 = new Employee();
+    Employee mockEmployee2 = new Employee();
+    Employee mockEmployee3 = new Employee();
 
     EmployeeController employeeController = new EmployeeController(mockService);
 
@@ -27,9 +29,7 @@ public class EmployeeControllerUnitTests {
 
         StepVerifier.create(
                 mockService.all())
-                .expectNext(mockEmployee1)
-                .expectNext(mockEmployee2)
-                .expectNext(mockEmployee3)
+                .expectNextSequence(Arrays.asList(mockEmployee1, mockEmployee2, mockEmployee3))
                 .expectComplete()
                 .verify();
     }
