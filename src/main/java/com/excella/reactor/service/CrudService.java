@@ -4,7 +4,6 @@ import com.excella.reactor.common.reactor.MonoUtils;
 import com.excella.reactor.domain.DomainModel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -12,8 +11,6 @@ public interface CrudService<T extends DomainModel> {
   default Flux<T> all(Pageable pageable) {
     return MonoUtils.retrieveAsList(() -> getRepository().findAll(pageable));
   }
-
-
 
   default Mono<T> byId(Long id) {
     return MonoUtils.fromCallableOpt(() -> getRepository().findById(id));
@@ -43,7 +40,6 @@ public interface CrudService<T extends DomainModel> {
                       return p;
                     }));
   }
-
 
   JpaRepository<T, Long> getRepository();
 }
