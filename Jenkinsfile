@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        jdk "Java 11"
+        jdk "11"
     }
     stages {
         stage('Clean') {
@@ -12,7 +12,6 @@ pipeline {
         }
         stage('Unit Tests') {
             steps {
-                sh 'java -version'
                 gradlew('testNG')
             }
             post {
