@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+      label 'excellanator'
+    }
     tools {
         jdk "11"
     }
