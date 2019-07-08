@@ -4,7 +4,7 @@ out
 build
 *.iml
 .DS_Store
+.env
 .envrc
 .java-version
 *.jks
-.env

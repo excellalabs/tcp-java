@@ -13,12 +13,12 @@ public class SecurityProperties {
   private JwtProperties jwt;
 
   @Data
-  static class OAuth2Properties {
+  public static class OAuth2Properties {
     private OAuth2ClientProperties client;
   }
 
   @Data
-  static class JwtProperties {
+  public static class JwtProperties {
     // location of the jks file. e.g. "classpath:server.jks"
     private Resource keyStore;
     // password to get into the JKS file

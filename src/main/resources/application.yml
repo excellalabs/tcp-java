@@ -19,11 +19,6 @@ spring:
 
 server.servlet.context-path: /api
 
-
-
-
-
-
 security:
   oauth2:
     client:
