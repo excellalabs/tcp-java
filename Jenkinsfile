@@ -54,7 +54,43 @@ pipeline {
             }
           }
         }
-    }
+        stage('Build Dev Image'){
+          steps{
+              sh './tcp-java-ecs/package-for-ecs dev'
+          }
+        }
+        stage('Deploy Dev Image'){
+          steps{
+            dir('tcp-java-ecs'){
+              sh './deploy-to-ecs dev'
+            }
+          }
+        }
+        /* stage('Build Test Image'){
+          steps{
+              sh './tcp-java-ecs/package-for-ecs test'
+          }
+        }
+        stage('Deploy Test Image'){
+          steps{
+            dir('tcp-java-ecs'){
+              sh './deploy-to-ecs test'
+            }
+          }
+        }
+        stage('Build Prod Image'){
+          steps{
+              sh './tcp-java-ecs/package-for-ecs prod'
+          }
+        }
+        stage('Deploy Prod Image'){
+          steps{
+            dir('tcp-java-ecs'){
+              sh './deploy-to-ecs prod'
+            }
+          }
+        } */
+      }
     post {
         success {
            setBuildStatus("Build succeeded", "SUCCESS");
