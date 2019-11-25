@@ -5,7 +5,6 @@ def REPO_URL = 'https://github.com/excellaco/tcp-java'
 
 pipeline {
   agent none
-  }
   stages {
     stage('Unit Tests') {
       agent {
