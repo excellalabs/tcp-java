@@ -16,8 +16,8 @@ pipeline {
         containers:
         - name: java11
           image: gradle:jdk11
-          command:
-          - /bin/sh
+          command: ['cat']
+          tty: true
       """
     }
   }
