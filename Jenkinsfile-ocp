@@ -12,16 +12,7 @@ pipeline {
           label 'jdk11-testing'
           cloud 'openshift'
           defaultContainer 'java11'
-          yaml """
-          apiVersion: v1
-          kind: Pod
-          spec:
-            containers:
-            - name: java11
-              image: gradle:jdk11
-              command: ['cat']
-              tty: true
-          """
+          yamlFile 'podtemplates/gradlepod.yml'
         }
       }
       steps {
