@@ -31,7 +31,7 @@ pipeline {
     }
     stage('Create Dev Configs') {
       agent {
-        label 'master'
+        label 'node'
       }
       when {
         not {
@@ -58,13 +58,13 @@ pipeline {
 
     stage('Start Build') {
       agent {
-        label 'master'
+        label 'node'
       }
       steps {
         script {
           openshift.withCluster() {
             openshift.withProject(DEV_ENV) {
-              def buildSelector = openshift.startBuild(appName, "--follow").narrow('bc')
+              openshift.startBuild(appName, "--follow")
             }
           }
         }
