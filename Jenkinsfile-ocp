@@ -15,7 +15,7 @@ pipeline {
       spec:
         containers:
         - name: java11
-          image: jenkins/jnlp-agent-maven:jdk11
+          image: gradle:jdk11
           command:
           - /bin/sh
       """
