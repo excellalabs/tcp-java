@@ -54,7 +54,9 @@ pipeline {
     }
 
     stage('Create Dev Configs') {
-      agent label {'master'}
+      agent {
+        label {'master'}
+      }
       when {
         not {
           expression {
@@ -79,7 +81,9 @@ pipeline {
     }
 
     stage('Start Build') {
-      agent label {'master'}
+      agent {
+        label {'master'}
+      }
       steps {
         script {
           openshift.withCluster() {
