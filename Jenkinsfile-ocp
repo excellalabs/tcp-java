@@ -6,6 +6,7 @@ def REPO_URL = 'https://github.com/excellaco/tcp-java'
 pipeline {
   agent {
     kubernetes {
+      label 'jdk11-testing'
       cloud 'openshift'
       defaultContainer 'java11'
       yaml """
