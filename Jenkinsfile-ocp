@@ -4,37 +4,32 @@ def S2I_IMAGE = 'fabric8/s2i-java:latest-java11'
 def REPO_URL = 'https://github.com/excellaco/tcp-java'
 
 pipeline {
-  agent {
-    kubernetes {
-      label 'jdk11-testing'
-      cloud 'openshift'
-      defaultContainer 'java11'
-      yaml """
-      apiVersion: v1
-      kind: Pod
-      spec:
-        containers:
-        - name: java11
-          image: gradle:jdk11
-          command: ['cat']
-          tty: true
-      """
-    }
+  agent none
   }
   stages {
-    stage('Linter') {
+    stage('Unit Tests') {
+      agent {
+        kubernetes {
+          label 'jdk11-testing'
+          cloud 'openshift'
+          defaultContainer 'java11'
+          yaml """
+          apiVersion: v1
+          kind: Pod
+          spec:
+            containers:
+            - name: java11
+              image: gradle:jdk11
+              command: ['cat']
+              tty: true
+          """
+        }
       steps {
         container('java11') {
           gradle('clean verGJF')
-          echo "${JOB_BASE_NAME}"
-        }
-      }
-    }
-
-    stage('Unit Tests') {
-      steps {
-        container('java11') {
           gradle('testNG')
+          gradle('jacocoTestReport')
+          gradle('jacocoTestCoverageVerification')
         }
       }
       post{
@@ -43,16 +38,6 @@ pipeline {
         }
       }
     }
-
-    stage('Jacoco') {
-      steps {
-        container('java11') {
-          gradle('jacocoTestReport')
-          gradle('jacocoTestCoverageVerification')
-        }
-      }
-    }
-
     stage('Create Dev Configs') {
       agent {
         label 'master'
