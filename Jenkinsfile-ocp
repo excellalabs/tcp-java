@@ -23,6 +23,7 @@ pipeline {
               tty: true
           """
         }
+      }
       steps {
         container('java11') {
           gradle('clean verGJF')
