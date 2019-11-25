@@ -55,7 +55,7 @@ pipeline {
 
     stage('Create Dev Configs') {
       agent {
-        label {'master'}
+        label 'master'
       }
       when {
         not {
@@ -82,7 +82,7 @@ pipeline {
 
     stage('Start Build') {
       agent {
-        label {'master'}
+        label 'master'
       }
       steps {
         script {
