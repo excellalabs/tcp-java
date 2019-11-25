@@ -2,28 +2,29 @@ def appName = 'tcp-java'
 def DEV_ENV = 'development'
 def S2I_IMAGE = 'fabric8/s2i-java:latest-java11'
 def REPO_URL = 'https://github.com/excellaco/tcp-java'
-def JDK_IMAGE = 'openjdk:11'
 
 pipeline {
   agent {
     kubernetes {
       cloud 'openshift'
+      defaultContainer 'java11'
       yaml """
       apiVersion: v1
       kind: Pod
       spec:
         containers:
-        - name: gradle
-          image: gradle:jdk11
-          tty: true
+        - name: java11
+          image: jenkins/jnlp-agent-maven:jdk11
+          command:
+          - /bin/sh
       """
     }
   }
   stages {
     stage('Linter') {
       steps {
-        container('gradle') {
-          gradle('clean verGJF')
+        container('java11') {
+          gradlew('clean verGJF')
           echo "${JOB_BASE_NAME}"
         }
       }
@@ -31,8 +32,8 @@ pipeline {
 
     stage('Unit Tests') {
       steps {
-        container('gradle') {
-          gradle('testNG')
+        container('java11') {
+          gradlew('testNG')
         }
       }
       post{
@@ -44,9 +45,9 @@ pipeline {
 
     stage('Jacoco') {
       steps {
-        container('gradle') {
-          gradle('jacocoTestReport')
-          gradle('jacocoTestCoverageVerification')
+        container('java11') {
+          gradlew('jacocoTestReport')
+          gradlew('jacocoTestCoverageVerification')
         }
       }
     }
@@ -92,5 +93,5 @@ pipeline {
 }
 
 def gradle(String... args) {
-    sh "gradle ${args.join(' ')} -s"
+    sh "./gradlew ${args.join(' ')} -s"
 }
