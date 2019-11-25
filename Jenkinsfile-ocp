@@ -25,7 +25,7 @@ pipeline {
     stage('Linter') {
       steps {
         container('java11') {
-          gradlew('clean verGJF')
+          gradle('clean verGJF')
           echo "${JOB_BASE_NAME}"
         }
       }
@@ -34,7 +34,7 @@ pipeline {
     stage('Unit Tests') {
       steps {
         container('java11') {
-          gradlew('testNG')
+          gradle('testNG')
         }
       }
       post{
@@ -47,8 +47,8 @@ pipeline {
     stage('Jacoco') {
       steps {
         container('java11') {
-          gradlew('jacocoTestReport')
-          gradlew('jacocoTestCoverageVerification')
+          gradle('jacocoTestReport')
+          gradle('jacocoTestCoverageVerification')
         }
       }
     }
@@ -94,5 +94,5 @@ pipeline {
 }
 
 def gradle(String... args) {
-    sh "./gradlew ${args.join(' ')} -s"
+    sh "gradle ${args.join(' ')} -s"
 }
