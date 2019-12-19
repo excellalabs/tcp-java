@@ -85,7 +85,7 @@ pipeline {
               sh './tcp-java-ecs/package-for-ecs tcp-java'
           }
         }
-        stage('Deploy Dev Image'){
+        stage('Deploy Image to Dev'){
           steps{
             dir('tcp-java-ecs'){
               sh "./configure-for-ecs ${PROJECT_NAME} dev ${AWS_REGION} ${env.GIT_COMMIT}"
@@ -93,7 +93,7 @@ pipeline {
             }
           }
         }
-        /*stage('Deploy Test Image'){
+        /*stage('Deploy Image to Test'){
           steps{
             dir('tcp-java-ecs'){
               sh './configure-for-ecs ${PROJECT_NAME} test ${AWS_REGION} ${env.GIT_COMMIT}'
@@ -101,7 +101,8 @@ pipeline {
             }
           }
         } */
-        stage('Deploy Prod Image'){
+        /* Uncomment this stage when we have a Prod environment for core tcp-java
+        stage('Deploy Image to Prod'){
           when {
             branch 'master'
           }
@@ -112,7 +113,7 @@ pipeline {
               sh "./deploy-to-ecs ${PROJECT_NAME} prod ${AWS_REGION}"
             }
           }
-        }
+        } */
       }
     post {
         success {
