@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Configure the (immutable) Docker image for the service.
+# Command-line arguments: PROJECT, ENV (e.g. dev or prod), AWS_REGION (e.g. us-east-1),
+#   IMAGE_LABEL
+# All actions are local to the VM; does not use aws or ecs-cli. TODO: ???
+# Should be run before deploy-to-ecs is run and after package-for-ecs is run.
+# Assumes the directory for the service exists in this directory,
+# its name matches "*-ecs", and it is the only directory that matches.
+
+# Fail on any error; unset variables are errors; show commands before executing:
+set -eux
+
+PROJECT="$1"
+ENV="$2"
+aws_region="$3"
+image_label="$4"
+if [ $image_label != latest ]; then
+  image_label=${image_label:0:7}
+fi
+
+echo "=== configure-for-ecs: $ENV ==="
+date
+echo "Running in $PWD"
+echo "Project = $PROJECT"
+echo "Target Environment = $ENV"
+echo "Image Label = $image_label"
+
+#### Configuration:
+
+# Add DB values to .env :
+DB_USER=$(aws ssm get-parameter --region $aws_region --name "/$PROJECT/$ENV/rds/username" --with-decryption --query "Parameter.Value" --out text)
+DB_PASSWORD=$(aws ssm get-parameter --region $aws_region --name "/$PROJECT/$ENV/rds/password" --with-decryption --query "Parameter.Value" --out text)
+DB_ENDPOINT=$(aws ssm get-parameter --region $aws_region --name "/$PROJECT/$ENV/rds/endpoint" --query "Parameter.Value" --out text)
+# Split at : into HOST and PORT:
+read DB_HOST DB_PORT <<<$(IFS=":"; echo $DB_ENDPOINT)
+
+# Add SMTP values to .env:
+# NOTE 1: As of 12/03/2019, these values where manually generated through the console, not terraform, so to persist future state and consistency they
+# should be generated via terraform (if possible) and pushed to SSM.
+# NOTE 2: SES is not available in every region: please see https://docs.aws.amazon.com/general/latest/gr/rande.html#ses_region
+
+SMTP_HOST=$(aws ssm get-parameter --region $aws_region --name "/$PROJECT/$ENV/smtp/endpoint" --with-decryption --query "Parameter.Value" --out text)
+SMTP_PORT=$(aws ssm get-parameter --region $aws_region --name "/$PROJECT/$ENV/smtp/port" --with-decryption --query "Parameter.Value" --out text)
+SMTP_USER=$(aws ssm get-parameter --region $aws_region --name "/$PROJECT/$ENV/smtp/username" --with-decryption --query "Parameter.Value" --out text)
+SMTP_PASSWORD=$(aws ssm get-parameter --region $aws_region --name "/$PROJECT/$ENV/smtp/password" --with-decryption --query "Parameter.Value" --out text)
+
+# Depends on IMAGE_REPO=${image_repo} already being in the ../.env file (put there by package-for-ecs)
+# Note: do NOT use double-quotes around the values; bash isn't interpreting .env: ecs-cli compose is, and it does not drop quotes.
+ECS_DIR=.
+cp -p ../.env $ECS_DIR/
+cat >> $ECS_DIR/.env <<EOF
+IMAGE_LABEL=${image_label}
+DB_HOST=${DB_HOST}
+DB_PORT=${DB_PORT}
+DB_USER=${DB_USER}
+DB_PASSWORD=${DB_PASSWORD}
+AWS_REGION=${aws_region}
+SMTP_HOST=${SMTP_HOST}
+SMTP_PORT=${SMTP_PORT}
+SMTP_USER=${SMTP_USER}
+SMTP_PASSWORD=${SMTP_PASSWORD}
+EOF
+
+#### DEBUGGING:
+cat $ECS_DIR/.env
+
+date

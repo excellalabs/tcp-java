@@ -80,45 +80,39 @@ pipeline {
                 step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
             }
         }
-        stage('Build Dev Image'){
+        stage('Build ECS Image'){
           steps{
-              sh './tcp-java-ecs/package-for-ecs ${PROJECT_NAME} dev ${AWS_REGION}'
+              sh './tcp-java-ecs/package-for-ecs tcp-java'
           }
         }
         stage('Deploy Dev Image'){
-          when {
-            not { expression { env.PROJECT_NAME.startsWith('prd') } }
-          }
           steps{
             dir('tcp-java-ecs'){
+              sh "./configure-for-ecs ${PROJECT_NAME} dev ${AWS_REGION} ${env.GIT_COMMIT}"
               sh "./deploy-to-ecs ${PROJECT_NAME} dev ${AWS_REGION}"
             }
           }
         }
-        /* stage('Build Test Image'){
-          steps{
-              sh './tcp-java-ecs/package-for-ecs ${PROJECT_NAME} test ${AWS_REGION}'
-          }
-        }
-        stage('Deploy Test Image'){
+        /*stage('Deploy Test Image'){
           steps{
             dir('tcp-java-ecs'){
+              sh './configure-for-ecs ${PROJECT_NAME} test ${AWS_REGION} ${env.GIT_COMMIT}'
               sh "./deploy-to-ecs ${PROJECT_NAME} test ${AWS_REGION}"
             }
           }
-        }
-        stage('Build Prod Image'){
-          steps{
-              sh './tcp-java-ecs/package-for-ecs ${PROJECT_NAME} prod ${AWS_REGION}'
-          }
-        }
+        } */
         stage('Deploy Prod Image'){
+          when {
+            branch 'master'
+          }
           steps{
             dir('tcp-java-ecs'){
+              sh './tag-as-latest'
+              sh './configure-for-ecs ${PROJECT_NAME} prod ${AWS_REGION} latest'
               sh "./deploy-to-ecs ${PROJECT_NAME} prod ${AWS_REGION}"
             }
           }
-        } */
+        }
       }
     post {
         success {
