@@ -58,7 +58,7 @@ EOF
 
 echo "Adding IMAGE_REPO to .env file..."
 cat <<EOF >> .env
-DATE=$(date)
+DATE="$(date)"
 IMAGE_REPO=$IMAGE_REPO
 EOF
 
