@@ -33,7 +33,7 @@ pipeline {
         script {
           sh "export AWS_ACCESS_KEY_ID=\"${secret_data.ACCESS_KEY}\""
           sh "export AWS_SECRET_ACCESS_KEY=\"${secret_data.SECRET_ACCESS_KEY}\""
-          sh "terraform plan --target=tcp-java-ocp/main.tf "
+          sh "terraform plan -target=tcp-java-ocp/main.tf"
         }
       }
     }
@@ -67,7 +67,7 @@ pipeline {
       when {
         not {
           expression {
-            return doesBuildConfigExist(appName)
+            return doesBuildConfigExist(DEV_ENV, appName)
           }
         }
       }
@@ -112,9 +112,9 @@ def getSecret(String namespace, String secretName) {
   }
 }
 
-def doesBuildConfigExist(String name) {
+def doesBuildConfigExist(String namespace, String name) {
   openshift.withCluster() {
-    openshift.withProject(DEV_ENV) {
+    openshift.withProject(namespace) {
       return openshift.selector("bc", name).exists()
     }
   }
