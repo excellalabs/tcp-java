@@ -98,5 +98,3 @@ pipeline {
 def gradle(String... args) {
     sh "gradle ${args.join(' ')} -s"
 }
-
-def
