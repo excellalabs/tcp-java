@@ -3,22 +3,26 @@ def DEV_ENV = 'development'
 def DEFAULT_ENV = 'default'
 def S2I_IMAGE = 'fabric8/s2i-java:latest-java11'
 def REPO_URL = 'https://github.com/excellaco/tcp-java'
+def AWS_PROVISIONING_SECRET = 'aws-provisioning-iam'
 
 pipeline {
   agent none
   stages {
     stage('RDS Test Run') {
       agent {
-        label 'nodejs'
+        kubernetes {
+          label 'terraform-update'
+          cloud 'openshift'
+          defaultContainer 'terraform'
+          yamlFile 'podtemplates/terraformpod.yml'
+        }
       }
       steps {
         script {
           openshift.withCluster() {
             openshift.withProject(DEFAULT_ENV) {
-              def secret = openshift.selector("secret", 'aws-provisioning-iam')
-              def secret_data = secret.object().data
-              sh "echo '${secret_data.ACCESS_KEY}'"
-              sh "echo '${secret_data.SECRET_ACCESS_KEY}'"
+              def secret_data = openshift.selector("secret", AWS_PROVISIONING_SECRET).object().data
+              sh "terraform version"
             }
           }
         }
@@ -94,3 +98,5 @@ pipeline {
 def gradle(String... args) {
     sh "gradle ${args.join(' ')} -s"
 }
+
+def
