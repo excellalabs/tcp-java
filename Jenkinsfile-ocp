@@ -5,9 +5,25 @@ def S2I_IMAGE = 'fabric8/s2i-java:latest-java11'
 def REPO_URL = 'https://github.com/excellaco/tcp-java'
 def AWS_PROVISIONING_SECRET = 'aws-provisioning-iam'
 
+def secret_data
+
 pipeline {
   agent none
   stages {
+    stage ('Get AWS Credentials') {
+      agent {
+        label 'nodejs'
+      }
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.withProject(DEFAULT_ENV) {
+              secret_data = openshift.selector("secret", AWS_PROVISIONING_SECRET).object().data
+            }
+          }
+        }
+      }
+    }
     stage('RDS Test Run') {
       agent {
         kubernetes {
@@ -19,12 +35,8 @@ pipeline {
       }
       steps {
         script {
-          openshift.withCluster() {
-            openshift.withProject(DEFAULT_ENV) {
-              def secret_data = openshift.selector("secret", AWS_PROVISIONING_SECRET).object().data
-              sh "terraform version"
-            }
-          }
+          sh "terraform version"
+          sh "echo ${secret_data.ACCESS_KEY}"
         }
       }
     }
