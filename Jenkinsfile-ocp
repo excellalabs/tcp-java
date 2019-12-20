@@ -16,11 +16,7 @@ pipeline {
       }
       steps {
         script {
-          openshift.withCluster() {
-            openshift.withProject(DEFAULT_ENV) {
-              secret_data = openshift.selector("secret", AWS_PROVISIONING_SECRET).object().data
-            }
-          }
+          secret_data = getSecret(DEFAULT_ENV, AWS_PROVISIONING_SECRET)
         }
       }
     }
@@ -70,11 +66,7 @@ pipeline {
       when {
         not {
           expression {
-            openshift.withCluster() {
-              openshift.withProject(DEV_ENV) {
-                return openshift.selector("bc", appName).exists()
-              }
-            }
+            return doesBuildConfigExist(appName)
           }
         }
       }
@@ -109,4 +101,20 @@ pipeline {
 
 def gradle(String... args) {
     sh "gradle ${args.join(' ')} -s"
+}
+
+def getSecret(String namespace, String secretName) {
+  openshift.withCluster() {
+    openshift.withProject(namespace) {
+      return openshift.selector("secret", secretName).object().data
+    }
+  }
+}
+
+def doesBuildConfigExist(String name) {
+  openshift.withCluster() {
+    openshift.withProject(DEV_ENV) {
+      return openshift.selector("bc", name).exists()
+    }
+  }
 }
