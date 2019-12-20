@@ -1,5 +1,6 @@
 def appName = 'tcp-java'
 def DEV_ENV = 'development'
+def DEFAULT_ENV = 'default'
 def S2I_IMAGE = 'fabric8/s2i-java:latest-java11'
 def REPO_URL = 'https://github.com/excellaco/tcp-java'
 
@@ -56,6 +57,21 @@ pipeline {
       }
     }
 
+    stage('RDS Test Run') {
+      agent {
+        label 'nodejs'
+      }
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.withProject(DEFAULT_ENV) {
+              def secret = openshift.selector("secret", "aws-provisioning-iam")
+              sh "echo ${secret}"
+            }
+          }
+        }
+      }
+    }
     stage('Start Build') {
       agent {
         label 'nodejs'
