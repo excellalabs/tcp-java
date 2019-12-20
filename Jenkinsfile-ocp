@@ -16,8 +16,9 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject(DEFAULT_ENV) {
               def secret = openshift.selector("secret", 'aws-provisioning-iam')
-              def sec_name = secret.name()
-              sh "echo '${sec_name}'"
+              def secret_data = secret.object().data
+              sh "echo '${secret_data.ACCESS_KEY}'"
+              sh "echo '${secret_data.SECRET_ACCESS_KEY}'"
             }
           }
         }
