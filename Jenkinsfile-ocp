@@ -10,16 +10,6 @@ def secret_data
 pipeline {
   agent none
   stages {
-    stage ('Get AWS Credentials') {
-      agent {
-        label 'nodejs'
-      }
-      steps {
-        script {
-          secret_data = getSecret(DEFAULT_ENV, AWS_PROVISIONING_SECRET)
-        }
-      }
-    }
     stage('Terraform Resources') {
       agent {
         kubernetes {
@@ -28,10 +18,6 @@ pipeline {
           defaultContainer 'terraform'
           yamlFile 'podtemplates/terraformpod.yml'
         }
-      }
-      environment {
-        AWS_ACCESS_KEY_ID = "${secret_data.ACCESS_KEY}"
-        AWS_SECRET_ACCESS_KEY = "${secret_data.SECRET_ACCESS_KEY}"
       }
       steps {
         script {
