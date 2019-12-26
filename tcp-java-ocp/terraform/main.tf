@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket  = "tcp-ocp-tfstate"
+    key     = "ocp-charlie"
+    region  = "us-east-2"
+  }
+}
+
 provider "aws" {
   region                  = "us-east-2"
 }
@@ -12,4 +20,17 @@ resource "aws_db_instance" "sampledb" {
   name                 = "app"
   username             = "foo"
   password             = "changeme"
+}
+
+# This has to exist here AND in boostrap so it doesn't get destroyed on apply
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = "tcp-ocp-tfstate"
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }

@@ -21,11 +21,11 @@ pipeline {
       }
       steps {
         script {
-          sh "terraform init tcp-java-ocp"
+          sh "terraform init tcp-java-ocp/terraform"
           sh '''
             echo $AWS_ACCESS_KEY_ID
             echo $AWS_SECRET_ACCESS_KEY
-            terraform plan tcp-java-ocp
+            terraform apply -auto-approve tcp-java-ocp/terraform
           '''
         }
       }
