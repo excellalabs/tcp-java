@@ -30,8 +30,8 @@ pipeline {
         }
       }
       environment {
-        AWS_ACCESS_KEY_ID = secret_data.ACCESS_KEY
-        AWS_SECRET_ACCESS_KEY = secret_data.SECRET_ACCESS_KEY
+        AWS_ACCESS_KEY_ID = "${secret_data.ACCESS_KEY}"
+        AWS_SECRET_ACCESS_KEY = "${secret_data.SECRET_ACCESS_KEY}"
       }
       steps {
         script {
